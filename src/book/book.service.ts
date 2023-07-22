@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Book } from './book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BookService {
@@ -29,10 +30,17 @@ export class BookService {
     });
   }
 
-  patchBook(id: number, book: CreateBookDto): Book {
-    this.getBook(id);
-    this.deleteBook(id);
-    this.postBook(book);
+  patchBook(id: number, newBook: UpdateBookDto): Book {
+    const previousBook = this.getBook(id);
+    this.books = this.books.map((book) => {
+      if (book.id === id) {
+        return {
+          ...previousBook,
+          ...newBook,
+        };
+      }
+      return book;
+    });
     return this.books.find((book) => book.id === id);
   }
 

@@ -10,6 +10,7 @@ import {
 import { BookService } from './book.service';
 import { Book } from './book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 @Controller()
 export class BookController {
@@ -38,7 +39,7 @@ export class BookController {
   }
 
   @Patch('/book/:id')
-  patchBook(@Param('id') id: number, @Body() book: CreateBookDto): Book {
+  patchBook(@Param('id') id: number, @Body() book: UpdateBookDto): Book {
     return this.bookService.patchBook(id, book);
   }
 
