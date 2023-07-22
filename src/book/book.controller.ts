@@ -1,5 +1,6 @@
 import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { BookService } from './book.service';
+import { Book } from './book.entity';
 
 @Controller()
 export class BookController {
@@ -11,28 +12,30 @@ export class BookController {
   }
 
   @Get('/book')
-  findAll(): string {
+  findAll(): Book[] {
     return this.bookService.getBooks();
   }
 
   @Get('/book/:id')
-  findOne(@Param() id: string): string {
+  findOne(@Param('id') id: string): Book {
     console.log(`🤖 > BookController > findOne > id:`, id);
     return this.bookService.getBook(id);
   }
 
   @Post('/book')
-  postBook(): string {
-    return this.bookService.postBook();
+  postBook() {
+    this.bookService.postBook();
+    return;
   }
 
   @Patch('/book/:id')
-  patchBook(@Param() id: string): string {
+  patchBook(@Param('id') id: string): Book {
     return this.bookService.patchBook(id);
   }
 
   @Delete('/book/:id')
-  deleteBook(@Param() id: string): string {
-    return this.bookService.deleteBook(id);
+  deleteBook(@Param('id') id: string) {
+    this.bookService.deleteBook(id);
+    return;
   }
 }
