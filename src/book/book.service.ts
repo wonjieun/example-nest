@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Book } from './book.entity';
+import { CreateBookDto } from './dto/create-book.dto';
 
 @Injectable()
 export class BookService {
@@ -13,31 +14,30 @@ export class BookService {
     return this.books;
   }
 
-  getBook(id: string): Book {
-    return this.books.find((book) => book.id === id);
+  getBook(id: number): Book {
+    const book = this.books.find((book) => book.id === id);
+    if (!book) {
+      throw new NotFoundException(`Book #${id} not found`);
+    }
+    return book;
   }
 
-  postBook() {
+  postBook(book: CreateBookDto) {
     this.books.push({
-      id: '1',
-      title: 'The Lord of the Rings',
-      author: 'J.R.R. Tolkien',
-      price: 9.99,
+      id: this.books.length + 1,
+      ...book,
     });
   }
 
-  patchBook(id: string): Book {
-    this.books = this.books.map((book) => {
-      if (book.id === id) {
-        book.title = 'The Lord of the Rings: The Fellowship of the Ring';
-      }
-      return book;
-    });
+  patchBook(id: number, book: CreateBookDto): Book {
+    this.getBook(id);
+    this.deleteBook(id);
+    this.postBook(book);
     return this.books.find((book) => book.id === id);
   }
 
-  deleteBook(id: string) {
+  deleteBook(id: number) {
+    this.getBook(id);
     this.books = this.books.filter((book) => book.id !== id);
-    return `This action removes a #${id} book`;
   }
 }
