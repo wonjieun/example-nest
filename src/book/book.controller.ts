@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { BookService } from './book.service';
-import { Book } from './book.entity';
+import { Book } from './entity/book.entity';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
